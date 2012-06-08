@@ -1,6 +1,19 @@
-//require jquery
-//require jquery.ui
-//requere jquery.prettyscroll
+/*!
+ * jQuery JavaScript plugin
+ * http://jquery.com/
+ *
+ * Copyright 2012, Efremov Alex (lexich)
+ *
+ * Require jquery-1.7.2.js
+ * http://jquery.com/
+ *
+ * Require jquery.ui.js
+ * http://jqueryui.com/
+ *
+ * Require jqeury.prettyscroll.js
+ * https://github.com/lexich/javascript-libs/
+ *
+ */
 
 (function($){
     function Controller( options ){
