@@ -41,6 +41,7 @@
             $bar.width(this.trackWidth);
             $wrapper.width(w - this.standartScrollWidth);
             $(scrollElement).width(w);
+            this.activeScroll(scrollElement, $bar );
         },
         /*Create scroll controls
          * <div class='trackClass'>
@@ -90,10 +91,19 @@
             //insert scroll controls to place for scroll controls
             $scroll.parent().after(self.scrollControls());
         },
-        is_scroll:function (item) {
-            var h = $(item).outerHeight() * 1.2;
-            this.logger("is_scroll height:" + h + " scrollHeight:" + item.scrollHeight);
+        isScroll:function (item) {
+            var h = $(item).outerHeight();
+            this.logger("isScroll height:" + h + " scrollHeight:" + item.scrollHeight);
             return item.scrollHeight <= h;
+        },
+        activeScroll : function( item, $bar ){
+            if (this.isScroll(item)) {
+                $bar.hide();
+                return false;
+            } else {
+                $bar.show();
+                return true;
+            }
         }
     };
 
@@ -119,10 +129,7 @@
             $bar.height($wrapper.height());
 
             $(this).scroll(function (e) {
-                if (ct.is_scroll(self)) {
-                    $bar.hide();
-                } else {
-                    $bar.show();
+                if( ct.activeScroll(self, $bar)){
                     ct.logger("scroll", e);
                     var height = this.scrollHeight - $(this).height();
                     var pos = $(this).scrollTop();
@@ -131,7 +138,7 @@
                     $slider.css("top", $bar.position().top + scaleEffect * moveLine);
                 }
             });
-            $(this).scroll();
+            ct.activeScroll(self, $bar);
             /**
              * Drap handler for slider scroll control
              */

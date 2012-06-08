@@ -3,35 +3,63 @@
 //requere jquery.prettyscroll
 
 (function($){
+    function Controller( options ){
+        this.menu = options.menu || "i-dropdown-menu";
+        this.scroll = options.scroll || "i-dropdown-scroll";
+        this.push = options.push || "i-dropdown-push";
+        this.elements = options.elements || "li > a";
+        this.scrolloptions = options.scrolloptions || {};
+    }
+    Controller.prototype = {
+        updateByContext : function(input, $base ){
+            var val = $(input).val().toLowerCase();
+            $base.find(this.elements).each(
+                function(){
+                    var text = $(this).text().toLowerCase();
+                    if( text.indexOf(val) != -1 ){
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            $(window).resize();
+        }
+    };
+
     $.fn.dropDownScroll = function(){
-        var options = arguments[0] || {};
-        var menu = options.menu || "i-dropdown-menu";
-        var scroll = options.scroll || "i-dropdown-scroll";
-        var push = options.push || "i-dropdown-push";
-        var scrolloptions = options.scrolloptions || {};
-        if( !scrolloptions.baseClass){
-            scrolloptions.baseClass = scroll;
+        var ct = new Controller( arguments[0] || {} );
+
+        if( !ct.scrolloptions.baseClass){
+            ct.scrolloptions.baseClass = ct.scroll;
         }
         $(this).each(function(){
-            $("." + menu).prettyScroll(scrolloptions);
+            var $self = $(this);
+
+            $("." + ct.menu).prettyScroll(ct.scrolloptions);
             var handler = function (e) {
-                var h = $("." + scroll);
+                var h = $("." + ct.scroll);
                 if(h.has( $(e.target)).length == 0 ){
                     h.hide();
                     $(document).unbind("mousedown", handler);
                 }
             };
-            $(this).find("."+push).mouseup(
+            $self.find("."+ct.push).mouseup(
                     function () {
                         $(document).bind("mousedown", handler);
-                        $("."+scroll).show();
+                        $("."+ct.scroll).show();
                     }
+            ).keyup(
+                function(){
+                    ct.updateByContext(this, $self );
+                }
             );
-            $("."+scroll).css({
+            $("."+ct.scroll).css({
                 "position":"absolute"
             });
-            $("."+scroll).hide();
+            $("."+ ct.scroll).hide();
+
 
         });
+
     }
 })(jQuery);
