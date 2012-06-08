@@ -167,13 +167,6 @@
             ct.updateSize(this);
         });
 
-        //TODO: remove
-        /*
-        $(window).resize(function () {
-            ct.logger("window_resize");
-            $self.prettyScrollResize();
-        });*/
-
         $self.prettyScrollResize();
     };
 
