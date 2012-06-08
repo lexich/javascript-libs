@@ -7,7 +7,7 @@
  * Require jquery-1.7.2.js
  * http://jquery.com/
  *
- * Require jquery.ui.js
+ * Require jquery.ui.js ((jQuery.draggable))
  * http://jqueryui.com/
  *
  * Require jqeury.prettyscroll.js
