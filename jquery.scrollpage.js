@@ -1,8 +1,18 @@
+/*!
+ * jQuery JavaScript plugin
+ * http://jquery.com/
+ *
+ * Copyright 2012, Efremov Alex (lexich)
+ *
+ * Require jquery-1.7.2.js
+ * http://jquery.com/
+ *
+*/
+
 /*
 * smooth scroll jQuery plugin
 *
 * usage:
-*
 * <a class="nav" href="#one">One</a>
 * <!-- some staff -->
 * <a name="one">One</a>
