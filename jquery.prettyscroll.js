@@ -108,6 +108,7 @@
     };
 
 
+
     $.fn.prettyScroll = function () {
         //parce options
         var ct = new Controller(arguments[0] || {});
@@ -160,12 +161,25 @@
 
         //update position
         var $self = $(this);
+
+        $(this).on("customResize", function(){
+            ct.logger("customResize event");
+            ct.updateSize(this);
+        });
+
+        //TODO: remove
+        /*
         $(window).resize(function () {
             ct.logger("window_resize");
-            $self.each(function () {
-                ct.updateSize(this);
-            });
+            $self.prettyScrollResize();
+        });*/
+
+        $self.prettyScrollResize();
+    };
+
+    $.fn.prettyScrollResize = function(){
+        $(this).each(function(){
+            $(this).trigger("customResize");
         });
-        $(window).resize();
-    }
+    };
 })(jQuery);

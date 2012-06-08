@@ -22,7 +22,7 @@
                         $(this).hide();
                     }
                 });
-            $(window).resize();
+            $base.find("."+this.menu).prettyScrollResize();
         }
     };
 
@@ -34,6 +34,7 @@
         }
         $(this).each(function(){
             var $self = $(this);
+            var $push = $self.find("."+ct.push);
 
             $("." + ct.menu).prettyScroll(ct.scrolloptions);
             var handler = function (e) {
@@ -43,21 +44,23 @@
                     $(document).unbind("mousedown", handler);
                 }
             };
-            $self.find("."+ct.push).mouseup(
+            $push.mouseup(
                     function () {
                         $(document).bind("mousedown", handler);
                         $("."+ct.scroll).show();
                     }
-            ).keyup(
+            );
+            $push.keyup(
                 function(){
                     ct.updateByContext(this, $self );
                 }
             );
+            ct.updateByContext($push.get(0), $self );
+
             $("."+ct.scroll).css({
                 "position":"absolute"
             });
             $("."+ ct.scroll).hide();
-
 
         });
 

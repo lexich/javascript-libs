@@ -8,7 +8,11 @@
 	<script type="text/javascript">
 		(function($){
 			$(document).ready(function(){
-				$(".i-dropdown").dropDownScroll();
+				$(".i-dropdown").dropDownScroll({
+                    "scrolloptions" : {
+                        "logger" : function(){console.log(arguments[0]);}
+                    }
+                });
 			});
 		})(jQuery);
 	</script>
