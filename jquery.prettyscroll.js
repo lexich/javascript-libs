@@ -36,6 +36,7 @@
         this.sliderClass = options.sliderClass || "slider";
         this.background = "transparent";
         this.standartScrollWidth = 16;
+        this.hoverClass = options.hoverClass || "scrollhover";
     }
 
     Controller.prototype = {
@@ -105,15 +106,15 @@
         isScroll:function (item) {
             var h = $(item).outerHeight();
             this.logger("isScroll height:" + h + " scrollHeight:" + item.scrollHeight);
-            return item.scrollHeight <= h;
+            return item.scrollHeight > h;
         },
         activeScroll : function( item, $bar ){
             if (this.isScroll(item)) {
-                $bar.hide();
-                return false;
-            } else {
                 $bar.show();
                 return true;
+            } else {
+                $bar.hide();
+                return false;
             }
         }
     };
@@ -127,12 +128,12 @@
         //apply to all elements
         $(this).each(function () {
             var self = this;
-            var $scroll = $(self);
+            var $self = $(this);
 
-            var height = $scroll.height();
-            $scroll.width($scroll.outerWidth() + ct.standartScrollWidth);
+            var height = $self.height();
+            $self.width($self.outerWidth() + ct.standartScrollWidth);
 
-            ct.wrapper($scroll);
+            ct.wrapper($self);
 
             var $base = $(this).parents("." + ct.baseClass);
             var $bar = $base.find("." + ct.trackClass);
@@ -143,11 +144,12 @@
             $(this).scroll(function (e) {
                 if( ct.activeScroll(self, $bar)){
                     ct.logger("scroll", e);
-                    var height = this.scrollHeight - $(this).height();
+                    var height = this.scrollHeight -  $(this).outerHeight();
                     var pos = $(this).scrollTop();
-                    var moveLine = $bar.height() - $slider.height();
                     var scaleEffect = pos / height;
-                    $slider.css("top", $bar.position().top + scaleEffect * moveLine);
+                    var moveLine = $bar.height() - $slider.height();
+                    var top = $bar.position().top + scaleEffect * moveLine;
+                    $slider.css("top", top );
                 }
             });
             ct.activeScroll(self, $bar);
@@ -163,22 +165,27 @@
                     ct.logger("drag", event, ui);
                     var y = ui.position.top - $bar.position().top;
                     var scrollK = y / ( $bar.height() - $(this).height());
-                    var scrollHeight = $scroll.get(0).scrollHeight;
-                    var scrollTop = (scrollHeight - $scroll.height()) * scrollK;
-                    $scroll.scrollTop(scrollTop);
+                    var scrollHeight = $self.get(0).scrollHeight;
+                    var scrollTop = (scrollHeight - $self.height()) * scrollK;
+                    $self.scrollTop(scrollTop);
                 }
+            });
+
+            $base.hover(function(){
+                $(this).addClass(ct.hoverClass);
+            }, function(){
+                $(this).removeClass(ct.hoverClass);
             });
         });
 
         //update position
-        var $self = $(this);
 
         $(this).on("customResize", function(){
             ct.logger("customResize event");
             ct.updateSize(this);
         });
 
-        $self.prettyScrollResize();
+        $(this).prettyScrollResize();
     };
 
     $.fn.prettyScrollResize = function(){
