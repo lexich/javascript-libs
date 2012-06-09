@@ -10,7 +10,7 @@
  * Require jquery.ui.js ((jQuery.draggable))
  * http://jqueryui.com/
  *
- * Require jqeury.prettyscroll.js
+ * Require jquery.prettyscroll.js
  * https://github.com/lexich/javascript-libs/
  *
  */

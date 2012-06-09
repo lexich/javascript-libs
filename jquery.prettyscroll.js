@@ -10,7 +10,7 @@
  * Require jquery.ui.js (jQuery.draggable)
  * http://jqueryui.com/
  *
- * Require jqeury.prettyscroll.js
+ * Require jquery.prettyscroll.js
  * https://github.com/lexich/javascript-libs/
  *
  */
@@ -149,7 +149,7 @@
                     var scaleEffect = pos / height;
                     var moveLine = $bar.height() - $slider.height();
                     var top = $bar.position().top + scaleEffect * moveLine;
-                    $slider.css("top", top );
+                    $slider.css({"top" : top });
                 }
             });
             ct.activeScroll(self, $bar);
