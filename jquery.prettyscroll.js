@@ -34,7 +34,6 @@
         this.wrapperContentClass = options.wrapperContentClass || "wrapper";
         //css class name of slider
         this.sliderClass = options.sliderClass || "slider";
-        this.background = "transparent";
         this.standartScrollWidth = 16;
         this.hoverClass = options.hoverClass || "scrollhover";
     }
@@ -49,11 +48,16 @@
             var $base = $(scrollElement).parents("." + this.baseClass);
             var $bar = $base.find("." + this.trackClass);
             var $wrapper = $base.find("." + this.wrapperContentClass);
-            var w = $base.width();
             $bar.width(this.trackWidth);
-            $wrapper.width(w - this.standartScrollWidth);
-            $(scrollElement).width(w);
-            this.activeScroll(scrollElement, $bar );
+
+            if( $(scrollElement).is("ul") ){
+                $wrapper.width( $(scrollElement).children(":first").width() );
+            } else {
+                $wrapper.width(scrollElement.scrollWidth);
+            }
+
+            this.activeScroll(scrollElement, $bar);
+            $base.width($wrapper.outerWidth() + $bar.outerWidth());
         },
         /*Create scroll controls
          * <div class='trackClass'>
@@ -62,9 +66,8 @@
          * */
         scrollControls:function () {
             var $bar = $("<div/>").css({
-                "float":"left",
-                "width":this.trackWidth,
-                "background":this.background
+                "float":"right",
+                "width":this.trackWidth
             }).addClass("bar");
             var $slider = $("<div/>").css({
                 "height":this.sliderHeight,
@@ -108,7 +111,7 @@
             this.logger("isScroll height:" + h + " scrollHeight:" + item.scrollHeight);
             return item.scrollHeight > h;
         },
-        activeScroll : function( item, $bar ){
+        activeScroll:function (item, $bar) {
             if (this.isScroll(item)) {
                 $bar.show();
                 return true;
@@ -118,7 +121,6 @@
             }
         }
     };
-
 
 
     $.fn.prettyScroll = function () {
@@ -142,14 +144,14 @@
             $bar.height($wrapper.height());
 
             $(this).scroll(function (e) {
-                if( ct.activeScroll(self, $bar)){
+                if (ct.activeScroll(self, $bar)) {
                     ct.logger("scroll", e);
-                    var height = this.scrollHeight -  $(this).outerHeight();
+                    var height = this.scrollHeight - $(this).outerHeight();
                     var pos = $(this).scrollTop();
                     var scaleEffect = pos / height;
                     var moveLine = $bar.height() - $slider.height();
                     var top = $bar.position().top + scaleEffect * moveLine;
-                    $slider.css({"top" : top });
+                    $slider.css({"top":top });
                 }
             });
             ct.activeScroll(self, $bar);
@@ -171,16 +173,16 @@
                 }
             });
 
-            $base.hover(function(){
+            $base.hover(function () {
                 $(this).addClass(ct.hoverClass);
-            }, function(){
+            }, function () {
                 $(this).removeClass(ct.hoverClass);
             });
         });
 
         //update position
 
-        $(this).on("customResize", function(){
+        $(this).on("customResize", function () {
             ct.logger("customResize event");
             ct.updateSize(this);
         });
@@ -188,8 +190,8 @@
         $(this).prettyScrollResize();
     };
 
-    $.fn.prettyScrollResize = function(){
-        $(this).each(function(){
+    $.fn.prettyScrollResize = function () {
+        $(this).each(function () {
             $(this).trigger("customResize");
         });
     };
