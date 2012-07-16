@@ -23,16 +23,22 @@ $.fn.imgPopup = function(){
                 $cloneObject.css({"max-height" : $(window).height() * 0.8 / x });
             }
         }
-        $cloneObject.css({"left" : ($(window).width() - $cloneObject.width()) /2 });
+        var top = $(window).height()/2 - $cloneObject.height()/2;
+        $cloneObject.css({
+            "left" : ($(window).width() - $cloneObject.width()) /2,
+            "top" : top,
+            "border" : "1px solid black"
+        });
     }
     $(this).each(function () {
         var href = $(this).attr("src");
         var $self = $(this);
         $self.click(function(){
             var $cloneObject = $self.clone();
+
             $cloneObject.css({
                 "position" : "fixed",
-                "top" : 50
+                "min-width" : 400
             }).addClass(wrapClass);
             $("#body").after($cloneObject);
             imgPopupUpdateSize($cloneObject);

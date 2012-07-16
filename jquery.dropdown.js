@@ -20,8 +20,10 @@
         this.menu = options.menu || "i-dropdown-menu";
         this.scroll = options.scroll || "i-dropdown-scroll";
         this.push = options.push || "i-dropdown-push";
+        this.button = options.button || "i-dropdown-button";
         this.elements = options.elements || "li > a";
         this.scrolloptions = options.scrolloptions || {};
+        this.logger = options.logger || function(){};
     }
     Controller.prototype = {
         updateByContext : function(input, $base ){
@@ -57,12 +59,19 @@
                     $(document).unbind("mousedown", handler);
                 }
             };
-            $push.mouseup(
-                    function () {
-                        $(document).bind("mousedown", handler);
-                        $("."+ct.scroll).show();
-                    }
-            );
+
+            function clickHandler () {
+                $(document).bind("mousedown", handler);
+                $("."+ct.scroll).show();
+                //ie f*cking hack
+                $("."+ct.scroll + " " + ct.elements).show();
+
+                var $menu = $self.find("."+ct.menu);
+                $menu.prettyScrollResize();
+            }
+
+            $self.find( "." + ct.button).click(clickHandler);
+            $push.mouseup(clickHandler);
             $push.keyup(
                 function(){
                     ct.updateByContext(this, $self );
@@ -72,8 +81,7 @@
 
             $("."+ct.scroll).css({
                 "position":"absolute"
-            });
-            $("."+ ct.scroll).hide();
+            }).hide();
 
         });
 
